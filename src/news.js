@@ -20,31 +20,29 @@ class News extends React.Component {
       let url;
 
       if (this.state.searchTerm) {
-        url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(this.state.searchTerm)}&apiKey=ce80a4cd2c2a4f85876708f181f42dd8`;
+        url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(this.state.searchTerm)}&apiKey=3aad5964299e46df80136a78b25f63be`;
       } else {
-        url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(this.props.newsName)}&apiKey=ce80a4cd2c2a4f85876708f181f42dd8`;
+        url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(this.props.newsName)}&apiKey=3aad5964299e46df80136a78b25f63be`;
       }
 
       let res = await fetch(url);
       let data = await res.json();
-      let articles = data.articles;
-      if (data && data.sort) {
-
-      articles.sort((a, b) => {
-        const aValue = a[this.state.sortField];
-        const bValue = b[this.state.sortField];
-
-        if (this.state.sortOrder === "asc") {
-          return aValue > bValue ? 1 : -1;
-        } else {
-          return aValue < bValue ? 1 : -1;
-        }
-      });
-      }
+      if (data && data.articles && data.articles.length > 0) {
+        let articles = data.articles;
       
-
-      articles = articles
-        .filter((article) => article.title && article.description && article.urlToImage) // Filter articles without proper title, description, or image
+        articles.sort((a, b) => {
+          const aValue = a[this.state.sortField];
+          const bValue = b[this.state.sortField];
+      
+          if (this.state.sortOrder === "asc") {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+      
+        articles = articles
+        .filter((article) => article.title && article.description && article.urlToImage)
         .map((article) => (
           <div className="p-8" key={article.title}>
             <div className="max-w-sm rounded overflow-hidden shadow-lg">
@@ -71,8 +69,8 @@ class News extends React.Component {
           </div>
         ));
 
-
-      this.setState({ articles, loading: false });
+        this.setState({ articles, loading: false });
+      }
     } catch (error) {
       console.error("Error fetching data: ", error);
       this.setState({ loading: false });
