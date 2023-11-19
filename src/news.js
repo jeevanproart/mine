@@ -28,6 +28,7 @@ class News extends React.Component {
       let res = await fetch(url);
       let data = await res.json();
       let articles = data.articles;
+      if (data && data.sort) {
 
       articles.sort((a, b) => {
         const aValue = a[this.state.sortField];
@@ -39,6 +40,7 @@ class News extends React.Component {
           return aValue < bValue ? 1 : -1;
         }
       });
+      }
 
       articles = articles
         .filter((article) => article.title && article.description && article.urlToImage) // Filter articles without proper title, description, or image
