@@ -41,7 +41,8 @@ class News extends React.Component {
         }
       });
       }
-
+      
+      if (dataSource && dataSource.filter) {
       articles = articles
         .filter((article) => article.title && article.description && article.urlToImage) // Filter articles without proper title, description, or image
         .map((article) => (
@@ -69,6 +70,7 @@ class News extends React.Component {
             </div>
           </div>
         ));
+}
 
       this.setState({ articles, loading: false });
     } catch (error) {
